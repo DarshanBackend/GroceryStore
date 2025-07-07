@@ -1,6 +1,6 @@
-import PrivacyPolicy from "../models/privacyPolicyModel";
-import { ThrowError } from "../utils/ErrorUtils";
-import { sendBadRequestResponse, sendCreatedResponse, sendSuccessResponse, sendErrorResponse } from "../utils/ResponseUtils";
+import PrivacyPolicy from "../models/privacyPolicyModel.js";
+import { ThrowError } from "../utils/ErrorUtils.js";
+import { sendBadRequestResponse, sendCreatedResponse, sendSuccessResponse, sendErrorResponse } from "../utils/ResponseUtils.js";
 import mongoose from "mongoose";
 
 
@@ -12,14 +12,14 @@ export const createPrivacyPolicy = async (req, res) => {
             return sendBadRequestResponse(res, "title and description are requires for privacyPolicy")
         }
 
-        const newprivacyPolicy = new PrivacyPolicy.create({
+        const newprivacyPolicy = new PrivacyPolicy({
             title,
             description
         })
 
-        await newprivacyPolicy.save()
+        const savePrivacyPolicy = await newprivacyPolicy.save()
 
-        return sendCreatedResponse(res, "PrivacyPolicy created successfully", newprivacyPolicy);
+        return sendCreatedResponse(res, "PrivacyPolicy created successfully", savePrivacyPolicy);
 
     } catch (error) {
         return ThrowError(res, 500, error.message)
@@ -35,7 +35,7 @@ export const getAllPrivacyPolicy = async (req, res) => {
             return sendSuccessResponse(res, "No PrivacyPolicy found", []);
         }
 
-        return sendSuccessResponse(res, "PrivacyPolicy fetched successfully", categories);
+        return sendSuccessResponse(res, "PrivacyPolicy fetched successfully", privacyPolicy);
     } catch (error) {
         return ThrowError(res, 500, error.message)
     }
@@ -54,6 +54,8 @@ export const getPrivacyPolicyById = async (req, res) => {
         if (!privacyPolicy) {
             return sendErrorResponse(res, 404, "PrivacyPolicy not found");
         }
+
+        return sendSuccessResponse(res, "PrivacyPolicy fetched successfully", privacyPolicy);
 
     } catch (error) {
         return ThrowError(res, 500, error.message)
@@ -97,7 +99,7 @@ export const deletePrivacyPolicy = async (req, res) => {
             return sendErrorResponse(res, 404, "Privacy Policy not found")
         }
 
-        await Category.findByIdAndDelete(id);
+        await PrivacyPolicy.findByIdAndDelete(id);
 
 
         return sendSuccessResponse(res, "PrivacyPolicy deleted successfully");

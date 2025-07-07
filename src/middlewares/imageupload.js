@@ -20,7 +20,12 @@ const storage = multer.diskStorage({
             uploadPath = 'public/subCategory_image';
         } else if (file.fieldname === 'dish_image') {
             uploadPath = 'public/dish_image';
+        } else if (file.fieldname === 'coupon_image') {
+            uploadPath = 'public/coupon_image';
+        } else if (file.fieldname === 'offer_image') {
+            uploadPath = 'public/offer_image';
         }
+
 
         // Create directory if it doesn't exist
         if (!fs.existsSync(uploadPath)) {
@@ -37,7 +42,7 @@ const storage = multer.diskStorage({
 // File filter function
 const fileFilter = (req, file, cb) => {
     // Accept files with common image field names
-    const allowedFieldNames = ['image', 'category_image', 'subCategory_image', 'dish_image'];
+    const allowedFieldNames = ['image', 'category_image', 'subCategory_image', 'dish_image', 'coupon_image', 'offer_image'];
 
     if (allowedFieldNames.includes(file.fieldname)) {
         cb(null, true);
